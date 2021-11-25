@@ -6,23 +6,37 @@ import java.util.*;
 import javax.persistence.*;
 import lombok.*;
 
-@Data
 @Entity
-@NoArgsConstructor
+@Getter
+@Setter
+@ToString
 @Table(name = "comment")
-@EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
+@RequiredArgsConstructor
 public class Comment extends Auditable {
 	@Id
-	@EqualsAndHashCode.Include
 	@Column(name = "id_comment")
 	private Integer id;
+	@ManyToOne
 	@JoinColumn(name = "id_suggestion", referencedColumnName = "id_suggestion")
+	private Suggestion suggestion;
 	@ManyToOne
-	private Suggestion idSuggestion;
 	@JoinColumn(name = "id_event_participant", referencedColumnName = "id_event_participant")
-	@ManyToOne
-	private EventParticipant idEventParticipant;
+	private EventParticipant eventParticipant;
 	@Column(name = "comment")
 	private String comment;
 	
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Comment comment = (Comment) o;
+		return id.equals(comment.id);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
+	}
+
+
 }

@@ -3,10 +3,6 @@ package romanizat.voxpopuli.service.impl;
 import java.util.List;
 import java.util.NoSuchElementException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Sort;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import romanizat.voxpopuli.entity.*;
 import romanizat.voxpopuli.repository.UserRepository;
@@ -14,7 +10,7 @@ import romanizat.voxpopuli.service.UserService;
 
 @Service
 @RequiredArgsConstructor
-public class UserServiceImpl implements UserService, UserDetailsService {
+public class UserServiceImpl implements UserService {
 	private final UserRepository userRepository;
 
 	@Override
@@ -67,11 +63,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 		User user = findById(idUser);
 		user.getRoles().removeAll(roles);
 		return userRepository.save(user).getRoles();
-	}
-
-	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		return userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User not found"));
 	}
 
 

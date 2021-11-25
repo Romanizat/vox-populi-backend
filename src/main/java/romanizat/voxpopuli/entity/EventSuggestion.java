@@ -6,20 +6,34 @@ import java.util.*;
 import javax.persistence.*;
 import lombok.*;
 
-@Data
 @Entity
-@NoArgsConstructor
+@Getter
+@Setter
+@ToString
+@RequiredArgsConstructor
 @Table(name = "event_suggestion")
-@EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
 public class EventSuggestion extends Auditable {
 	@Id
-	@EqualsAndHashCode.Include
 	@Column(name = "id_event_suggestion")
 	private Integer id;
-	@JoinColumn(name = "id_event", referencedColumnName = "id_event")
 	@ManyToOne
-	private Event idEvent;
+	@JoinColumn(name = "id_event", referencedColumnName = "id_event")
+	private Event event;
 	@Column(name = "position")
 	private Integer position;
 	
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		EventSuggestion eventSuggestion = (EventSuggestion) o;
+		return id.equals(eventSuggestion.id);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
+	}
+
+
 }

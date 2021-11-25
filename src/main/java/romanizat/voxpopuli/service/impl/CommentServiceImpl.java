@@ -3,7 +3,6 @@ package romanizat.voxpopuli.service.impl;
 import java.util.List;
 import java.util.NoSuchElementException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import romanizat.voxpopuli.entity.*;
 import romanizat.voxpopuli.repository.CommentRepository;
