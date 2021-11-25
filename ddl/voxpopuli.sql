@@ -1,124 +1,161 @@
-drop table if exists comment;
+drop table if exists `comment`;
 
-drop table if exists event;
+drop table if exists `event`;
 
-drop table if exists event_participant;
+drop table if exists `event_participant`;
 
-drop table if exists event_suggestion;
+drop table if exists `event_suggestion`;
 
-drop table if exists rating;
+drop table if exists `rating`;
 
-drop table if exists role;
+drop table if exists `role`;
 
-drop table if exists suggestion;
+drop table if exists `suggestion`;
 
-drop table if exists user;
+drop table if exists `user`;
 
-drop table if exists user_role;
+drop table if exists `user_role`;
 
 /*==============================================================*/
 /* table: comment                                               */
 /*==============================================================*/
-create table comment
+create table `comment`
 (
-   id_comment           int not null,
+   id_comment           int not null auto_increment,
    id_suggestion        int not null,
    id_event_participant int not null,
    comment              varchar(1024) not null,
+   created_date			timestamp NOT NULL DEFAULT current_timestamp(),
+   last_modified_date	timestamp NOT NULL DEFAULT current_timestamp(),
+   last_modified_by		varchar(64) DEFAULT 'system',
+   record_status		int(11) DEFAULT 1,
    primary key (id_comment)
 );
 
 /*==============================================================*/
 /* table: event                                                 */
 /*==============================================================*/
-create table event
+create table `event`
 (
-   id_event             int not null,
+   id_event             int not null auto_increment,
    name                 varchar(1024) not null,
    date                 datetime,
    location             varchar(1024),
+   banned               boolean not null DEFAULT 0,
+   created_date			timestamp NOT NULL DEFAULT current_timestamp(),
+   last_modified_date	timestamp NOT NULL DEFAULT current_timestamp(),
+   last_modified_by		varchar(64) DEFAULT 'system',
+   record_status		int(11) DEFAULT 1,
    primary key (id_event)
 );
 
 /*==============================================================*/
 /* table: event_participant                                     */
 /*==============================================================*/
-create table event_participant
+create table `event_participant`
 (
-   id_event_participant int not null,
+   id_event_participant int not null auto_increment,
    id_user              int not null,
    id_event             int not null,
    organizer            boolean not null,
+   created_date			timestamp NOT NULL DEFAULT current_timestamp(),
+   last_modified_date	timestamp NOT NULL DEFAULT current_timestamp(),
+   last_modified_by		varchar(64) DEFAULT 'system',
+   record_status		int(11) DEFAULT 1,
    primary key (id_event_participant)
 );
 
 /*==============================================================*/
 /* table: event_suggestion                                      */
 /*==============================================================*/
-create table event_suggestion
+create table `event_suggestion`
 (
-   id_event_suggestion  int not null,
+   id_event_suggestion  int not null auto_increment,
    id_event             int not null,
    position             int not null,
+   created_date			timestamp NOT NULL DEFAULT current_timestamp(),
+   last_modified_date	timestamp NOT NULL DEFAULT current_timestamp(),
+   last_modified_by		varchar(64) DEFAULT 'system',
+   record_status		int(11) DEFAULT 1,
    primary key (id_event_suggestion)
 );
 
 /*==============================================================*/
 /* table: rating                                                */
 /*==============================================================*/
-create table rating
+create table `rating`
 (
-   id_rating            int not null,
+   id_rating            int not null auto_increment,
    id_suggestion        int not null,
    id_event_participant int not null,
    rating               int not null,
+   created_date			timestamp NOT NULL DEFAULT current_timestamp(),
+   last_modified_date	timestamp NOT NULL DEFAULT current_timestamp(),
+   last_modified_by		varchar(64) DEFAULT 'system',
+   record_status		int(11) DEFAULT 1,
    primary key (id_rating)
 );
 
 /*==============================================================*/
 /* table: role                                                  */
 /*==============================================================*/
-create table role
+create table `role`
 (
-   id_role              int not null,
+   id_role              int not null auto_increment,
    role                 varchar(1024) not null,
+   created_date			timestamp NOT NULL DEFAULT current_timestamp(),
+   last_modified_date	timestamp NOT NULL DEFAULT current_timestamp(),
+   last_modified_by		varchar(64) DEFAULT 'system',
+   record_status		int(11) DEFAULT 1,
    primary key (id_role)
 );
 
 /*==============================================================*/
 /* table: suggestion                                            */
 /*==============================================================*/
-create table suggestion
+create table `suggestion`
 (
-   id_suggestion        int not null,
+   id_suggestion        int not null auto_increment,
    id_event_suggestion  int,
    title                varchar(1024) not null,
    url                  varchar(1024) not null,
+   created_date			timestamp NOT NULL DEFAULT current_timestamp(),
+   last_modified_date	timestamp NOT NULL DEFAULT current_timestamp(),
+   last_modified_by		varchar(64) DEFAULT 'system',
+   record_status		int(11) DEFAULT 1,
    primary key (id_suggestion)
 );
 
 /*==============================================================*/
 /* table: user                                                  */
 /*==============================================================*/
-create table user
+create table `user`
 (
-   id_user              int not null,
+   id_user              int not null auto_increment,
    username             varchar(1024) not null,
    password             varchar(1024) not null,
    email                varchar(1024) not null,
    name                 varchar(1024) not null,
    last_name            varchar(1024) not null,
-   banned               boolean not null,
+   banned               boolean not null DEFAULT 0,
+   created_date			timestamp NOT NULL DEFAULT current_timestamp(),
+   last_modified_date	timestamp NOT NULL DEFAULT current_timestamp(),
+   last_modified_by		varchar(64) DEFAULT 'system',
+   record_status		int(11) DEFAULT 1,
    primary key (id_user)
 );
 
 /*==============================================================*/
 /* table: user_role                                             */
 /*==============================================================*/
-create table user_role
+create table `user_role`
 (
    id_role              int not null,
    id_user              int not null,
+   created_date			timestamp NOT NULL DEFAULT current_timestamp(),
+   last_modified_date	timestamp NOT NULL DEFAULT current_timestamp(),
+   last_modified_by		varchar(64) DEFAULT 'system',
+   record_status		int(11) DEFAULT 1,
    primary key (id_role, id_user)
 );
 

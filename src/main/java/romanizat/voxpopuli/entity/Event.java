@@ -20,6 +20,8 @@ public class Event extends Auditable {
 	private String name;
 	@Column(name = "date")
 	private LocalDateTime date;
+	@Column(name = "banned")
+	private Boolean banned;
 	@Column(name = "location")
 	private String location;
 	
