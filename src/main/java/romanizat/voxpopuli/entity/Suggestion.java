@@ -1,12 +1,12 @@
 package romanizat.voxpopuli.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
-import java.time.*;
-import java.util.*;
 import javax.persistence.*;
-
-import lombok.*;
+import java.util.Objects;
 
 @Entity
 @Getter
@@ -16,6 +16,7 @@ import lombok.*;
 @Table(name = "suggestion")
 public class Suggestion extends Auditable {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_suggestion")
     private Integer id;
     @ManyToOne

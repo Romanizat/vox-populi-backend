@@ -1,12 +1,17 @@
 package romanizat.voxpopuli.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
-import java.time.*;
-import java.util.*;
 import javax.persistence.*;
-
-import lombok.*;
+import java.util.Collection;
+import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Getter
@@ -14,8 +19,9 @@ import lombok.*;
 @ToString
 @Table(name = "user")
 @RequiredArgsConstructor
-public class User extends Auditable {
+public class User extends Auditable implements UserDetails {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_user")
     private Integer id;
     @Column(name = "username")
@@ -30,10 +36,42 @@ public class User extends Auditable {
     private String lastName;
     @Column(name = "banned")
     private Boolean banned;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JsonIgnore
     @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "id_user"), inverseJoinColumns = @JoinColumn(name = "id_role"))
     private List<Role> roles;
+
+    @JsonIgnore
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return roles;
+    }
+
+
+    @JsonIgnore
+    @Override
+    public boolean isAccountNonExpired() {
+        return isEnabled();
+    }
+
+    @JsonIgnore
+    @Override
+    public boolean isAccountNonLocked() {
+        return isEnabled();
+    }
+
+    @JsonIgnore
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return isEnabled();
+    }
+
+    @JsonIgnore
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
 
     @Override
     public boolean equals(Object o) {

@@ -1,12 +1,16 @@
 package romanizat.voxpopuli.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+import org.springframework.security.core.GrantedAuthority;
 
-import java.time.*;
-import java.util.*;
 import javax.persistence.*;
-
-import lombok.*;
+import java.util.List;
+import java.util.Locale;
+import java.util.Objects;
 
 @Entity
 @Getter
@@ -14,16 +18,24 @@ import lombok.*;
 @ToString
 @Table(name = "role")
 @RequiredArgsConstructor
-public class Role extends Auditable {
+public class Role extends Auditable implements GrantedAuthority {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_role")
     private Integer id;
     @Column(name = "role")
     private String role;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JsonIgnore
     @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "id_role"), inverseJoinColumns = @JoinColumn(name = "id_user"))
     private List<User> users;
+
+    @Override
+    public String getAuthority() {
+        return String.format("role_%s", getRole())
+                .toUpperCase(Locale.ROOT);
+    }
+
 
     @Override
     public boolean equals(Object o) {
