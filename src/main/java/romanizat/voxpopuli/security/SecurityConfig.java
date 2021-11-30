@@ -60,11 +60,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             UserDetails user = userDetailsService.loadUserByUsername(username);
             if (!user.isEnabled())
                 throw new DisabledException("Account disabled");
-            System.out.println(username);
-            System.out.println(password);
 
             if (!passwordEncoder().matches(password, user.getPassword()))
-                throw new BadCredentialsException("auth.invalidCredentials");
+                throw new BadCredentialsException("Incorrect username or password");
 
             if (!user.isCredentialsNonExpired()) {
                 return new UsernamePasswordAuthenticationToken(username, null, Collections.emptyList());
