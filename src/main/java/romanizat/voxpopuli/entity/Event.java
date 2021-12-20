@@ -26,8 +26,6 @@ public class Event extends Auditable {
     private LocalDateTime date;
     @Column(name = "location")
     private String location;
-    @Column(name = "banned")
-    private Boolean banned;
 
     @Override
     public boolean equals(Object o) {
