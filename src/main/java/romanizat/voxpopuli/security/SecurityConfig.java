@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
@@ -41,13 +43,27 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.httpBasic().disable()
-                .csrf().disable()
-                .cors().and()
-                .authorizeRequests().anyRequest().authenticated().and()
-                .addFilter(new JwtAuthenticationFilter(authenticationManager(), jwtProvider))
-                .addFilterBefore(new JwtAuthorizationFilter(authorizationManager(), jwtProvider), UsernamePasswordAuthenticationFilter.class)
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and();
+        if (Boolean.parseBoolean(securityDisabled)) {
+            http.httpBasic().disable().cors().and()
+                    .csrf().disable()
+                    .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                    .and()
+                    .authorizeRequests()
+                    .antMatchers("/**").permitAll().and()
+                    .addFilter(new JwtAuthenticationFilter(authenticationManager(), jwtProvider));
+        } else {
+            http.httpBasic().disable()
+                    .cors()
+                    .and()
+                    .csrf().disable()
+                    .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                    .and()
+                    .authorizeRequests()
+                    .antMatchers(HttpMethod.POST, "/login").permitAll()
+                    .anyRequest().permitAll()
+                    .and()
+                    .addFilter(new JwtAuthenticationFilter(authenticationManager(), jwtProvider));
+        }
     }
 
     @Bean
