@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import romanizat.voxpopuli.entity.Role;
 import romanizat.voxpopuli.entity.User;
@@ -74,6 +75,13 @@ public class UserController {
     @PutMapping("/{userId}/toggle")
     public ResponseEntity<User> toggleById(@PathVariable Integer userId) {
         return ResponseEntity.ok(userService.toggleRecordStatus(userId));
+    }
+
+    @GetMapping("/logged-in")
+    public ResponseEntity<User> loggedIn(@AuthenticationPrincipal User user) {
+        System.out.println("hello");
+        System.out.println(user);
+        return ResponseEntity.ok(user);
     }
 
 }

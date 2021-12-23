@@ -46,5 +46,11 @@ public class EventController {
         eventService.deleteById(idEvent);
     }
 
+    @GetMapping("/all-by-user-id/{idUser}")
+    @ApiOperation(value = "", nickname = "getEventsByUserId")
+    public ResponseEntity<Event> getAllEventsByUserId(@PathVariable Integer idUser) {
+        return ResponseEntity.ok(eventService.findById(idUser));
+    }
+
 }
 
