@@ -71,5 +71,10 @@ public class UserController {
         return ResponseEntity.ok(userService.deleteRolesById(idUser, roles));
     }
 
+    @PutMapping("/{userId}/toggle")
+    public ResponseEntity<User> toggleById(@PathVariable Integer userId) {
+        return ResponseEntity.ok(userService.toggleRecordStatus(userId));
+    }
+
 }
 

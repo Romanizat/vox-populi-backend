@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.env.Environment;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -18,10 +17,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import romanizat.voxpopuli.entity.User;
+import romanizat.voxpopuli.service.UserService;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -32,13 +32,15 @@ import java.util.Locale;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final JwtProvider jwtProvider;
     private final UserDetailsService userDetailsService;
+    private final UserService userService;
 
     @Value("${spring.security.disabled:false}")
     private String securityDisabled;
 
-    public SecurityConfig(JwtProvider jwtProvider, UserDetailsService userDetailsService) {
+    public SecurityConfig(JwtProvider jwtProvider, UserDetailsService userDetailsService, UserService userService) {
         this.jwtProvider = jwtProvider;
         this.userDetailsService = userDetailsService;
+        this.userService = userService;
     }
 
     @Override
@@ -73,18 +75,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return authentication -> {
             String username = authentication.getName().toLowerCase(Locale.ROOT).trim();
             String password = authentication.getCredentials().toString();
-            UserDetails user = userDetailsService.loadUserByUsername(username);
-            if (!user.isEnabled())
-                throw new DisabledException("Account disabled");
+            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+            User user = userService.findUserByUsername(username);
+            if (user.getBanned())
+                throw new DisabledException("Account banned");
 
-            if (!passwordEncoder().matches(password, user.getPassword()))
+            if (!passwordEncoder().matches(password, userDetails.getPassword()))
                 throw new BadCredentialsException("Incorrect username or password");
 
-            if (!user.isCredentialsNonExpired()) {
+            if (!userDetails.isCredentialsNonExpired()) {
                 return new UsernamePasswordAuthenticationToken(username, null, Collections.emptyList());
             }
 
-            return new UsernamePasswordAuthenticationToken(username, null, user.getAuthorities());
+            return new UsernamePasswordAuthenticationToken(username, null, userDetails.getAuthorities());
         };
     }
 

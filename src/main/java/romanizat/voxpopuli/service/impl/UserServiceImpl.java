@@ -1,9 +1,5 @@
 package romanizat.voxpopuli.service.impl;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.NoSuchElementException;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -12,10 +8,14 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import romanizat.voxpopuli.entity.*;
+import romanizat.voxpopuli.entity.Role;
+import romanizat.voxpopuli.entity.User;
 import romanizat.voxpopuli.repository.UserRepository;
 import romanizat.voxpopuli.service.RoleService;
 import romanizat.voxpopuli.service.UserService;
+
+import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -85,6 +85,18 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         User user = findById(idUser);
         user.getRoles().removeAll(roles);
         return userRepository.save(user).getRoles();
+    }
+
+    @Override
+    public User toggleRecordStatus(Integer userId) {
+        User user = findById(userId);
+        user.setBanned(!user.getBanned());
+        return userRepository.save(user);
+    }
+
+    @Override
+    public User findUserByUsername(String username) {
+        return userRepository.findByUsername(username).orElseThrow(() -> new NoSuchElementException("UserService.notFound"));
     }
 
     @Override
