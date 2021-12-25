@@ -16,6 +16,6 @@ public interface EventService {
 
 	void deleteById(Integer idEvent);
 
-	List<Event> findAllEventsByUserId();
+	List<Event> findAllEventsByUserId(Integer userId);
 
 }

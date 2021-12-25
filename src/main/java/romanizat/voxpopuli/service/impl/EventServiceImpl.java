@@ -6,12 +6,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import romanizat.voxpopuli.entity.*;
 import romanizat.voxpopuli.repository.EventRepository;
+import romanizat.voxpopuli.service.EventParticipantService;
 import romanizat.voxpopuli.service.EventService;
 
 @Service
 @RequiredArgsConstructor
 public class EventServiceImpl implements EventService {
 	private final EventRepository eventRepository;
+	private final EventParticipantService eventParticipantService;
 
 	@Override
 	public List<Event> findAll() {
@@ -40,8 +42,8 @@ public class EventServiceImpl implements EventService {
 	}
 
 	@Override
-	public List<Event> findAllEventsByUserId() {
-		return null;
+	public List<Event> findAllEventsByUserId(Integer userId) {
+		return eventParticipantService.findAllEventsByUserId(userId);
 	}
 
 

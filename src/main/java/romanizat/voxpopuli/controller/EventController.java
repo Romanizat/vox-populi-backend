@@ -48,8 +48,8 @@ public class EventController {
 
     @GetMapping("/all-by-user-id/{idUser}")
     @ApiOperation(value = "", nickname = "getEventsByUserId")
-    public ResponseEntity<Event> getAllEventsByUserId(@PathVariable Integer idUser) {
-        return ResponseEntity.ok(eventService.findById(idUser));
+    public ResponseEntity<List<Event>> getAllEventsByUserId(@PathVariable Integer idUser) {
+        return ResponseEntity.ok(eventService.findAllEventsByUserId(idUser));
     }
 
 }
