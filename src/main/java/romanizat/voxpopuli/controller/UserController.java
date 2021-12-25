@@ -4,12 +4,16 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import romanizat.voxpopuli.entity.Role;
 import romanizat.voxpopuli.entity.User;
 import romanizat.voxpopuli.service.UserService;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @RestController
@@ -28,6 +32,12 @@ public class UserController {
     @ApiOperation(value = "", nickname = "getUserById")
     public ResponseEntity<User> getUserById(@PathVariable Integer idUser) {
         return ResponseEntity.ok(userService.findById(idUser));
+    }
+
+    @GetMapping("/user-by-username/{username}")
+    @ApiOperation(value = "", nickname = "getUserById")
+    public ResponseEntity<User> getUserByUsername(@PathVariable String username) {
+        return ResponseEntity.ok(userService.findUserByUsername(username));
     }
 
     @PostMapping
@@ -77,12 +87,6 @@ public class UserController {
         return ResponseEntity.ok(userService.toggleRecordStatus(userId));
     }
 
-    @GetMapping("/logged-in")
-    public ResponseEntity<User> loggedIn(@AuthenticationPrincipal User user) {
-        System.out.println("hello");
-        System.out.println(user);
-        return ResponseEntity.ok(user);
-    }
 
 }
 
