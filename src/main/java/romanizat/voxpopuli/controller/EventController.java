@@ -52,5 +52,10 @@ public class EventController {
         return ResponseEntity.ok(eventService.findAllEventsByUserId(idUser));
     }
 
+    @PostMapping("/create-event/{idUser}")
+    @ApiOperation(value = "", nickname = "createEventByUserId")
+    public ResponseEntity<Event> createEventByUserId(@RequestBody Event event, @PathVariable Integer idUser) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(eventService.createEventByUserId(event, idUser));
+    }
 }
 

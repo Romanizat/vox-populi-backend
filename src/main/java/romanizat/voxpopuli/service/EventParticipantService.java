@@ -1,6 +1,5 @@
 package romanizat.voxpopuli.service;
 
-import romanizat.voxpopuli.entity.Event;
 import romanizat.voxpopuli.entity.EventParticipant;
 
 import java.util.List;
@@ -16,7 +15,5 @@ public interface EventParticipantService {
     EventParticipant findById(Integer idEventParticipant);
 
     void deleteById(Integer idEventParticipant);
-
-    List<Event> findAllEventsByUserId(Integer userId);
 
 }

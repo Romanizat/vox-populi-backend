@@ -6,16 +6,18 @@ import java.util.List;
 
 public interface EventService {
 
-	List<Event> findAll();
+    List<Event> findAll();
 
-	Event save(Event event);
+    Event save(Event event);
 
-	Event update(Event event);
+    Event update(Event event);
 
-	Event findById(Integer idEvent);
+    Event findById(Integer idEvent);
 
-	void deleteById(Integer idEvent);
+    void deleteById(Integer idEvent);
 
-	List<Event> findAllEventsByUserId(Integer userId);
+    List<Event> findAllEventsByUserId(Integer userId);
+
+    Event createEventByUserId(Event event, Integer userId);
 
 }
