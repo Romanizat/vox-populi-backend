@@ -13,7 +13,7 @@ public interface EventSuggestionRepository extends JpaRepository<EventSuggestion
 
     @Query(value = "SELECT es.* " +
             "FROM event_suggestion es " +
-            "WHERE es.id_event = :eventId  ", nativeQuery = true)
+            "WHERE es.id_event = :eventId order by es.position ", nativeQuery = true)
     List<EventSuggestion> findAllEventSuggestionsForEvent(@Param("eventId") Integer eventId);
 
 }

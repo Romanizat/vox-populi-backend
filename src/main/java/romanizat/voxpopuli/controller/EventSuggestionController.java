@@ -31,7 +31,6 @@ public class EventSuggestionController {
     @PostMapping
     @ApiOperation(value = "", nickname = "saveEventSuggestion")
     public ResponseEntity<EventSuggestion> saveEventSuggestion(@RequestBody EventSuggestion eventSuggestion) {
-        System.out.println(eventSuggestion);
         return ResponseEntity.status(HttpStatus.CREATED).body(eventSuggestionService.save(eventSuggestion));
     }
 
