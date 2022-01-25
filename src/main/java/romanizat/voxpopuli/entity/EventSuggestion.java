@@ -24,6 +24,10 @@ public class EventSuggestion extends Auditable {
     private Event event;
     @Column(name = "position")
     private Integer position;
+    @Column(name = "title")
+    private String title;
+    @Column(name = "url")
+    private String url;
 
     @Override
     public boolean equals(Object o) {

@@ -31,6 +31,7 @@ public class EventSuggestionController {
     @PostMapping
     @ApiOperation(value = "", nickname = "saveEventSuggestion")
     public ResponseEntity<EventSuggestion> saveEventSuggestion(@RequestBody EventSuggestion eventSuggestion) {
+        System.out.println(eventSuggestion);
         return ResponseEntity.status(HttpStatus.CREATED).body(eventSuggestionService.save(eventSuggestion));
     }
 
@@ -46,5 +47,10 @@ public class EventSuggestionController {
         eventSuggestionService.deleteById(idEventSuggestion);
     }
 
+    @GetMapping("get-all-by-event/{idEvent}")
+    @ApiOperation(value = "", nickname = "getAllEventSuggestionsForEvent")
+    public ResponseEntity<List<EventSuggestion>> getAllEventSuggestionsForEvent(@PathVariable Integer idEvent) {
+        return ResponseEntity.ok(eventSuggestionService.getAllEventSuggestionsForEvent(idEvent));
+    }
 }
 
