@@ -6,6 +6,7 @@ import java.util.NoSuchElementException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import romanizat.voxpopuli.entity.*;
+import romanizat.voxpopuli.exception.UrlExistsException;
 import romanizat.voxpopuli.repository.EventSuggestionRepository;
 import romanizat.voxpopuli.service.EventSuggestionService;
 
@@ -27,6 +28,19 @@ public class EventSuggestionServiceImpl implements EventSuggestionService {
 
     @Override
     public EventSuggestion save(EventSuggestion eventSuggestion) {
+        String url = eventSuggestion.getUrl().trim();
+        String[] splitUrl;
+        if (url.contains("watch")) {
+            splitUrl = url.split("=");
+        } else {
+            splitUrl = url.split("/");
+        }
+        url = splitUrl[splitUrl.length - 1];
+        eventSuggestion.setUrl(url);
+        if (songExistsInEvent(eventSuggestion.getUrl(), eventSuggestion.getEvent().getId())) {
+            throw new UrlExistsException();
+        }
+
         return eventSuggestionRepository.save(eventSuggestion);
     }
 
@@ -45,5 +59,14 @@ public class EventSuggestionServiceImpl implements EventSuggestionService {
         return eventSuggestionRepository.findAllEventSuggestionsForEvent(idEvent);
     }
 
+    private boolean songExistsInEvent(String url, Integer eventId) {
+        List<EventSuggestion> eventSuggestionList = this.findAll();
+        for (EventSuggestion eventSuggestion : eventSuggestionList) {
+            if (eventSuggestion.getUrl().equals(url) && eventSuggestion.getEvent().getId().equals(eventId)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
 }
