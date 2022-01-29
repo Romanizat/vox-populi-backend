@@ -33,4 +33,6 @@ public interface EventSuggestionRepository extends JpaRepository<EventSuggestion
             "from event_suggestion es " +
             "where es.position > :position order by es.position asc ", nativeQuery = true)
     List<EventSuggestion> findAllWithPositionGreaterThanSelectedPosition(@Param("position") Integer position);
+
+    void deleteAllByEventId(Integer idEvent);
 }

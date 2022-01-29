@@ -64,6 +64,11 @@ public class EventSuggestionServiceImpl implements EventSuggestionService {
         return eventSuggestionRepository.findAllEventSuggestionsForEventByEventIdOrderedByPosition(idEvent);
     }
 
+    @Override
+    public void removeAllSuggestionsForEvent(Integer idEvent) {
+        eventSuggestionRepository.deleteAllByEventId(idEvent);
+    }
+
     private boolean songExistsInEvent(String url, Integer eventId) {
         List<EventSuggestion> eventSuggestionList = eventSuggestionRepository.findAllByEventId(eventId);
         for (EventSuggestion eventSuggestion : eventSuggestionList) {

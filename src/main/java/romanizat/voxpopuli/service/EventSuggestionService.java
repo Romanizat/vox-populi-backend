@@ -17,4 +17,6 @@ public interface EventSuggestionService {
     void deleteById(Integer idEventSuggestion);
 
     List<EventSuggestion> getAllEventSuggestionsForEvent(Integer idEvent);
+
+    void removeAllSuggestionsForEvent(Integer idEvent);
 }

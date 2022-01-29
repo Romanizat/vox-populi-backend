@@ -12,4 +12,6 @@ public interface EventParticipantRepository extends JpaRepository<EventParticipa
             "where event_participant.id_event = :idEvent " +
             "and event_participant.id_user = :idUser ", nativeQuery = true)
     EventParticipant findByEventIdAndUserId(@Param("idEvent") Integer idEvent, @Param("idUser") Integer idUser);
+
+    void deleteAllByEventId(Integer idEvent);
 }

@@ -7,8 +7,10 @@ import romanizat.voxpopuli.entity.EventParticipant;
 import romanizat.voxpopuli.repository.EventRepository;
 import romanizat.voxpopuli.service.EventParticipantService;
 import romanizat.voxpopuli.service.EventService;
+import romanizat.voxpopuli.service.EventSuggestionService;
 import romanizat.voxpopuli.service.UserService;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -18,6 +20,7 @@ public class EventServiceImpl implements EventService {
     private final EventRepository eventRepository;
     private final EventParticipantService eventParticipantService;
     private final UserService userService;
+    private final EventSuggestionService eventSuggestionService;
 
     @Override
     public List<Event> findAll() {
@@ -41,7 +44,10 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    @Transactional
     public void deleteById(Integer idEvent) {
+        this.eventParticipantService.removeAllParticipantsForEvent(idEvent);
+        this.eventSuggestionService.removeAllSuggestionsForEvent(idEvent);
         eventRepository.deleteById(idEvent);
     }
 
