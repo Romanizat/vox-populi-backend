@@ -85,19 +85,19 @@ public class EventSuggestionServiceImpl implements EventSuggestionService {
     }
 
     //TODO: method to set order on change
-//    private void changeEventSuggestionOrderInEvent(EventSuggestion eventSuggestion, Integer newPosition) {
-//        List<EventSuggestion> eventSuggestionList = eventSuggestionRepository.findAllByEventId(eventSuggestion.getEvent().getId());
-//        eventSuggestionList.remove(eventSuggestion);
-//        List<EventSuggestion> eventSuggestionListBeforePosition = new ArrayList<>();
-//        List<EventSuggestion> eventSuggestionListAfterPosition = new ArrayList<>();
-//        int oldPosition = eventSuggestion.getPosition();
-//        eventSuggestionList.forEach(eventSuggestion1 -> {
-//            if (eventSuggestion1.getPosition() < oldPosition) {
-//                eventSuggestionListBeforePosition.add(eventSuggestion1);
-//            } else {
-//                eventSuggestionListAfterPosition.add(eventSuggestion1);
-//            }
-//        });
-//    }
+    private void changeEventSuggestionOrderInEvent(EventSuggestion eventSuggestion, Integer newPosition) {
+        List<EventSuggestion> eventSuggestionList = eventSuggestionRepository.findAllByEventId(eventSuggestion.getEvent().getId());
+        eventSuggestionList.remove(eventSuggestion);
+        List<EventSuggestion> eventSuggestionListBeforePosition = new ArrayList<>();
+        List<EventSuggestion> eventSuggestionListAfterPosition = new ArrayList<>();
+        int oldPosition = eventSuggestion.getPosition();
+        eventSuggestionList.forEach(eventSuggestion1 -> {
+            if (eventSuggestion1.getPosition() < oldPosition) {
+                eventSuggestionListBeforePosition.add(eventSuggestion1);
+            } else {
+                eventSuggestionListAfterPosition.add(eventSuggestion1);
+            }
+        });
+    }
 
 }
