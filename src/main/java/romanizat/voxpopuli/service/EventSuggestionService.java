@@ -19,4 +19,6 @@ public interface EventSuggestionService {
     List<EventSuggestion> getAllEventSuggestionsForEvent(Integer idEvent);
 
     void removeAllSuggestionsForEvent(Integer idEvent);
+
+    void changeEventSuggestionOrderInEvent(Integer oldPosition, Integer newPosition, Integer eventId);
 }

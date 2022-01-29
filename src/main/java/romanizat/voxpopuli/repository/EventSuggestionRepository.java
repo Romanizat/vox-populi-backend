@@ -1,5 +1,6 @@
 package romanizat.voxpopuli.repository;
 
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -35,4 +36,23 @@ public interface EventSuggestionRepository extends JpaRepository<EventSuggestion
     List<EventSuggestion> findAllWithPositionGreaterThanSelectedPosition(@Param("position") Integer position);
 
     void deleteAllByEventId(Integer idEvent);
+
+    EventSuggestion findByEventIdAndPosition(Integer eventId, Integer position);
+
+    @Query(value = "select es.* " +
+            "from event_suggestion es " +
+            "where es.position > :startPosition and es.position<= :endPosition and es.id_event=:idEvent " +
+            "order by es.position asc ", nativeQuery = true)
+    List<EventSuggestion> findAllBetweenPositionsIncludingEnd(@Param("startPosition") Integer startPosition, @Param("endPosition") Integer endPosition, @Param("idEvent") Integer idEvent);
+
+    @Query(value = "select es.* " +
+            "from event_suggestion es " +
+            "where es.position >= :startPosition and es.position< :endPosition and es.id_event=:idEvent " +
+            "order by es.position asc ", nativeQuery = true)
+    List<EventSuggestion> findAllBetweenPositionsAndIncludingStart(@Param("startPosition") Integer startPosition, @Param("endPosition") Integer endPosition, @Param("idEvent") Integer idEvent);
+
+    @Query(value = "select es.* " +
+            "from event_suggestion es " +
+            "where es.position > :position and es.id_event=:idEvent order by es.position asc ", nativeQuery = true)
+    List<EventSuggestion> findAllWithPositionGreaterThanSelectedPosition(@Param("position") Integer position, @Param("idEvent") Integer idEvent);
 }

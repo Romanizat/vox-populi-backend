@@ -7,7 +7,6 @@ import romanizat.voxpopuli.exception.UrlExistsException;
 import romanizat.voxpopuli.repository.EventSuggestionRepository;
 import romanizat.voxpopuli.service.EventSuggestionService;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -69,6 +68,28 @@ public class EventSuggestionServiceImpl implements EventSuggestionService {
         eventSuggestionRepository.deleteAllByEventId(idEvent);
     }
 
+    @Override
+    public void changeEventSuggestionOrderInEvent(Integer oldPosition, Integer newPosition, Integer eventId) {
+        EventSuggestion eventSuggestion = eventSuggestionRepository.findByEventIdAndPosition(eventId, oldPosition);
+        if (oldPosition < newPosition) {
+            List<EventSuggestion> eventSuggestionsBetweenOldAndNewPosition = eventSuggestionRepository
+                    .findAllBetweenPositionsIncludingEnd(oldPosition, newPosition, eventId);
+            eventSuggestionsBetweenOldAndNewPosition.forEach(eventSuggestionBetween -> {
+                eventSuggestionBetween.setPosition(eventSuggestionBetween.getPosition() - 1);
+                eventSuggestionRepository.save(eventSuggestionBetween);
+            });
+        } else if (oldPosition > newPosition) {
+            List<EventSuggestion> eventSuggestionsBetweenOldAndNewPosition = eventSuggestionRepository
+                    .findAllBetweenPositionsAndIncludingStart(newPosition, oldPosition, eventId);
+            eventSuggestionsBetweenOldAndNewPosition.forEach(eventSuggestionBetween -> {
+                eventSuggestionBetween.setPosition(eventSuggestionBetween.getPosition() + 1);
+                eventSuggestionRepository.save(eventSuggestionBetween);
+            });
+        }
+        eventSuggestion.setPosition(newPosition);
+        eventSuggestionRepository.save(eventSuggestion);
+    }
+
     private boolean songExistsInEvent(String url, Integer eventId) {
         List<EventSuggestion> eventSuggestionList = eventSuggestionRepository.findAllByEventId(eventId);
         for (EventSuggestion eventSuggestion : eventSuggestionList) {
@@ -87,22 +108,6 @@ public class EventSuggestionServiceImpl implements EventSuggestionService {
             splitUrl = youTubeUrl.split("/");
         }
         return splitUrl[splitUrl.length - 1];
-    }
-
-    //TODO: method to set order on change
-    private void changeEventSuggestionOrderInEvent(EventSuggestion eventSuggestion, Integer newPosition) {
-        List<EventSuggestion> eventSuggestionList = eventSuggestionRepository.findAllByEventId(eventSuggestion.getEvent().getId());
-        eventSuggestionList.remove(eventSuggestion);
-        List<EventSuggestion> eventSuggestionListBeforePosition = new ArrayList<>();
-        List<EventSuggestion> eventSuggestionListAfterPosition = new ArrayList<>();
-        int oldPosition = eventSuggestion.getPosition();
-        eventSuggestionList.forEach(eventSuggestion1 -> {
-            if (eventSuggestion1.getPosition() < oldPosition) {
-                eventSuggestionListBeforePosition.add(eventSuggestion1);
-            } else {
-                eventSuggestionListAfterPosition.add(eventSuggestion1);
-            }
-        });
     }
 
 }

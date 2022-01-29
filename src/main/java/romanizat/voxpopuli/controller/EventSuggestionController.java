@@ -51,5 +51,11 @@ public class EventSuggestionController {
     public ResponseEntity<List<EventSuggestion>> getAllEventSuggestionsForEvent(@PathVariable Integer idEvent) {
         return ResponseEntity.ok(eventSuggestionService.getAllEventSuggestionsForEvent(idEvent));
     }
+
+    @PutMapping("update-positions/{oldPosition}/{newPosition}/{eventId}")
+    @ApiOperation(value = "", nickname = "updateEventSuggestionPositionInEvent")
+    public void updateEventSuggestionPosition(@PathVariable Integer oldPosition, @PathVariable Integer newPosition, @PathVariable Integer eventId) {
+        eventSuggestionService.changeEventSuggestionOrderInEvent(oldPosition, newPosition, eventId);
+    }
 }
 
