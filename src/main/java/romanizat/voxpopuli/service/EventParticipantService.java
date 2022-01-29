@@ -16,4 +16,5 @@ public interface EventParticipantService {
 
     void deleteById(Integer idEventParticipant);
 
+    EventParticipant findByIdEventIdAndUserId(Integer idEvent, Integer idUser);
 }

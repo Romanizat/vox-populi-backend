@@ -28,6 +28,12 @@ public class EventParticipantController {
         return ResponseEntity.ok(eventParticipantService.findById(idEventParticipant));
     }
 
+    @GetMapping("/{idEvent}/{idUser}")
+    @ApiOperation(value = "", nickname = "getEventParticipantById")
+    public ResponseEntity<EventParticipant> getEventParticipantByEventIdAndUserId(@PathVariable Integer idEvent, @PathVariable Integer idUser) {
+        return ResponseEntity.ok(eventParticipantService.findByIdEventIdAndUserId(idEvent, idUser));
+    }
+
     @PostMapping
     @ApiOperation(value = "", nickname = "saveEventParticipant")
     public ResponseEntity<EventParticipant> saveEventParticipant(@RequestBody EventParticipant eventParticipant) {
