@@ -28,4 +28,9 @@ public interface EventSuggestionRepository extends JpaRepository<EventSuggestion
             "where es.id_event = :eventId", nativeQuery = true)
     Integer findMaxPositionForEventSuggestionByEventId(@Param("eventId") Integer eventId);
 
+
+    @Query(value = "select es.* " +
+            "from event_suggestion es " +
+            "where es.position > :position order by es.position asc ", nativeQuery = true)
+    List<EventSuggestion> findAllWithPositionGreaterThanSelectedPosition(@Param("position") Integer position);
 }

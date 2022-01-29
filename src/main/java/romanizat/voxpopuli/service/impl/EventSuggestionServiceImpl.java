@@ -30,17 +30,11 @@ public class EventSuggestionServiceImpl implements EventSuggestionService {
     @Override
     public EventSuggestion save(EventSuggestion eventSuggestion) {
         String url = eventSuggestion.getUrl().trim();
-        String[] splitUrl;
-        if (url.contains("watch")) {
-            splitUrl = url.split("=");
-        } else {
-            splitUrl = url.split("/");
-        }
-        url = splitUrl[splitUrl.length - 1];
-        eventSuggestion.setUrl(url);
+        eventSuggestion.setUrl(prettifyUrl(url));
         if (songExistsInEvent(eventSuggestion.getUrl(), eventSuggestion.getEvent().getId())) {
             throw new UrlExistsException();
         }
+        // get maximum position of event suggestion for event and increment the value for the new event suggestion
         eventSuggestion.setPosition(eventSuggestionRepository.findMaxPositionForEventSuggestionByEventId(eventSuggestion.getEvent().getId()) + 1);
 
         return eventSuggestionRepository.save(eventSuggestion);
@@ -53,7 +47,16 @@ public class EventSuggestionServiceImpl implements EventSuggestionService {
 
     @Override
     public void deleteById(Integer idEventSuggestion) {
+        Integer position = this.findById(idEventSuggestion).getPosition();
         eventSuggestionRepository.deleteById(idEventSuggestion);
+        // Get all Event Suggestions after the position of the deleted Event Suggestion
+        List<EventSuggestion> eventSuggestionList = eventSuggestionRepository.findAllWithPositionGreaterThanSelectedPosition(position);
+        // Iterate through the list and decrement the positions
+        for (EventSuggestion eventSuggestion : eventSuggestionList) {
+            eventSuggestion.setPosition(eventSuggestion.getPosition() - 1);
+            eventSuggestionRepository.save(eventSuggestion);
+        }
+
     }
 
     @Override
@@ -69,6 +72,16 @@ public class EventSuggestionServiceImpl implements EventSuggestionService {
             }
         }
         return false;
+    }
+
+    private String prettifyUrl(String youTubeUrl) {
+        String[] splitUrl;
+        if (youTubeUrl.contains("watch")) {
+            splitUrl = youTubeUrl.split("=");
+        } else {
+            splitUrl = youTubeUrl.split("/");
+        }
+        return splitUrl[splitUrl.length - 1];
     }
 
     //TODO: method to set order on change
