@@ -19,4 +19,6 @@ public interface EventParticipantService {
     EventParticipant findByIdEventIdAndUserId(Integer idEvent, Integer idUser);
 
     void removeAllParticipantsForEvent(Integer idEvent);
+
+    List<EventParticipant> findAllEventParticipantsByEventId(Integer idEvent);
 }

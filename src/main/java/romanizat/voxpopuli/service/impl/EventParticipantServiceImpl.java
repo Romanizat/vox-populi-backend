@@ -50,5 +50,10 @@ public class EventParticipantServiceImpl implements EventParticipantService {
         eventParticipantRepository.deleteAllByEventId(idEvent);
     }
 
+    @Override
+    public List<EventParticipant> findAllEventParticipantsByEventId(Integer idEvent) {
+        return eventParticipantRepository.findAllByEventId(idEvent);
+    }
+
 
 }

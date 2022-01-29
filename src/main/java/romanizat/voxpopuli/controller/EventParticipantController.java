@@ -29,9 +29,15 @@ public class EventParticipantController {
     }
 
     @GetMapping("/{idEvent}/{idUser}")
-    @ApiOperation(value = "", nickname = "getEventParticipantById")
+    @ApiOperation(value = "", nickname = "getEventParticipantByEventIdAndUserId")
     public ResponseEntity<EventParticipant> getEventParticipantByEventIdAndUserId(@PathVariable Integer idEvent, @PathVariable Integer idUser) {
         return ResponseEntity.ok(eventParticipantService.findByIdEventIdAndUserId(idEvent, idUser));
+    }
+
+    @GetMapping("/event-id/{idEvent}")
+    @ApiOperation(value = "", nickname = "getAllEventParticipantsByEventId")
+    public ResponseEntity<List<EventParticipant>> getAllEventParticipantByEventId(@PathVariable Integer idEvent) {
+        return ResponseEntity.ok(eventParticipantService.findAllEventParticipantsByEventId(idEvent));
     }
 
     @PostMapping
