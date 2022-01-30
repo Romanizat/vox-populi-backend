@@ -51,6 +51,19 @@ class VoxPopuliApplicationTests {
         return tableBody.getAttribute("innerHTML");
     }
 
+    private String deleteEvent() throws InterruptedException {
+        login();
+        WebElement eventDetailsButton = chromeDriver.findElement(
+                By.xpath("/html/body/app-root/mat-drawer-container/mat-drawer-content/app-view-events/div/table/tbody/tr[2]/td[4]/mat-icon"));
+        eventDetailsButton.click();
+        Thread.sleep(2000);
+        WebElement deleteEventButton = chromeDriver.findElement(By.xpath("/html/body/app-root/mat-drawer-container/mat-drawer-content/app-event-details/div[4]/button"));
+        deleteEventButton.click();
+        Thread.sleep(1000);
+        WebElement tableBody = chromeDriver.findElement(By.xpath("/html/body/app-root/mat-drawer-container/mat-drawer-content/app-view-events/div/table/tbody"));
+        return tableBody.getAttribute("innerHTML");
+    }
+
     @Test
     void loginTest() throws InterruptedException {
         Assertions.assertEquals("http://localhost:4200/events", login());
@@ -60,6 +73,12 @@ class VoxPopuliApplicationTests {
     @Test
     void createEventTest() throws InterruptedException {
         Assertions.assertTrue(createEvent().contains("Selenium Test"));
+        chromeDriver.close();
+    }
+
+    @Test
+    void deleteEventTest() throws InterruptedException {
+        Assertions.assertFalse(deleteEvent().contains("Selenium Test"));
         chromeDriver.close();
     }
 
