@@ -1,6 +1,7 @@
 package romanizat.voxpopuli;
 
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -15,17 +16,11 @@ class VoxPopuliApplicationTests {
     }
 
     private final static WebDriver chromeDriver = new ChromeDriver();
-//    private final static WebDriver driver = new ChromeDriver();
-
-//    static {
-//        WebDriverManager.chromedriver().setup();
-//        chromeDriver = new ChromeDriver();
-//    }
 
 
     private final String url = "http://localhost:4200/";
 
-    private void login() {
+    private String login() throws InterruptedException {
         chromeDriver.navigate().to(url);
         WebElement usernameField = chromeDriver.findElement(By.xpath("//*[@id=\"mat-input-0\"]"));
         usernameField.sendKeys("admin");
@@ -33,13 +28,15 @@ class VoxPopuliApplicationTests {
         passwordField.sendKeys("admin");
         WebElement loginButton = chromeDriver.findElement(By.xpath("//*[@id=\"mat-tab-content-0-0\"]/div/form/button/span[1]"));
         loginButton.click();
-
-        chromeDriver.close();
+        System.out.println(chromeDriver.getCurrentUrl());
+        Thread.sleep(2000);
+        return chromeDriver.getCurrentUrl();
     }
 
     @Test
-    void loginTest() {
-        this.login();
+    void loginTest() throws InterruptedException {
+        Assertions.assertEquals("http://localhost:4200/events", this.login());
+        chromeDriver.close();
     }
 
 }
