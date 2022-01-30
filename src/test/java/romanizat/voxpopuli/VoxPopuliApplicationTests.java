@@ -1,9 +1,7 @@
 package romanizat.voxpopuli;
 
 
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -11,6 +9,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class VoxPopuliApplicationTests {
     static {
         System.setProperty("webdriver.chrome.driver", "chromedriver_win32\\chromedriver.exe");
@@ -18,10 +17,8 @@ class VoxPopuliApplicationTests {
 
     private final static WebDriver chromeDriver = new ChromeDriver();
 
-
-    private final String url = "http://localhost:4200/";
-
     private String login() throws InterruptedException {
+        final String url = "http://localhost:4200/";
         chromeDriver.navigate().to(url);
         WebElement usernameField = chromeDriver.findElement(By.xpath("//*[@id=\"mat-input-0\"]"));
         usernameField.sendKeys("admin");
@@ -73,30 +70,34 @@ class VoxPopuliApplicationTests {
         //login();
         WebElement createEventButton = chromeDriver.findElement(By.xpath("/html/body/app-root/mat-drawer-container/mat-drawer-content/app-view-events/div/div/button"));
         createEventButton.click();
-        Thread.sleep(1000);
-        WebElement saveEventButton = chromeDriver.findElement(By.xpath("//*[@id=\"mat-dialog-0\"]/app-create-event/div/form/div/button/span[1]"));
+        Thread.sleep(2000);
+        WebElement saveEventButton = chromeDriver.findElement(By.id("createEvent"));
         saveEventButton.click();
         Thread.sleep(1000);
-        WebElement snackBar = chromeDriver.findElement(By.xpath("//*[@id=\"cdk-overlay-2\"]/snack-bar-container/div/div/simple-snack-bar"));
+        WebElement snackBar = chromeDriver.findElement(By.tagName("snack-bar-container"));
         return snackBar.getAttribute("innerHTML");
     }
 
     @Test
+    @Order(1)
     void loginTest() throws InterruptedException {
         Assertions.assertEquals("http://localhost:4200/events", login());
     }
 
     @Test
+    @Order(2)
     void createEventTest() throws InterruptedException {
         Assertions.assertTrue(createEvent().contains("Selenium Test"));
     }
 
     @Test
+    @Order(3)
     void deleteEventTest() throws InterruptedException {
         Assertions.assertFalse(deleteEvent().contains("Selenium Test"));
     }
 
     @Test
+    @Order(4)
     void createEventWithoutDataTest() throws InterruptedException {
         Assertions.assertTrue(createEventWithoutData().contains("Please enter all of the required fields"));
     }
