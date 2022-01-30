@@ -28,14 +28,38 @@ class VoxPopuliApplicationTests {
         passwordField.sendKeys("admin");
         WebElement loginButton = chromeDriver.findElement(By.xpath("//*[@id=\"mat-tab-content-0-0\"]/div/form/button/span[1]"));
         loginButton.click();
-        System.out.println(chromeDriver.getCurrentUrl());
         Thread.sleep(2000);
         return chromeDriver.getCurrentUrl();
     }
 
+    private String createEvent() throws InterruptedException {
+        login();
+        WebElement createEventButton = chromeDriver.findElement(By.xpath("/html/body/app-root/mat-drawer-container/mat-drawer-content/app-view-events/div/div/button"));
+        createEventButton.click();
+        Thread.sleep(1000);
+        WebElement eventNameField = chromeDriver.findElement(By.id("eventName"));
+        eventNameField.sendKeys("Selenium Test");
+        WebElement eventDateField = chromeDriver.findElement(By.id("eventDate"));
+        eventDateField.sendKeys("2/2/2022");
+        WebElement eventLocationField = chromeDriver.findElement(By.id("eventLocation"));
+        eventLocationField.sendKeys("SE201");
+        WebElement saveEventButton = chromeDriver.findElement(By.xpath("//*[@id=\"mat-dialog-0\"]/app-create-event/div/form/div/button/span[1]"));
+        saveEventButton.click();
+        Thread.sleep(1000);
+        WebElement tableBody = chromeDriver.findElement(By.xpath("/html/body/app-root/mat-drawer-container/mat-drawer-content/app-view-events/div/table/tbody"));
+        Thread.sleep(1000);
+        return tableBody.getAttribute("innerHTML");
+    }
+
     @Test
     void loginTest() throws InterruptedException {
-        Assertions.assertEquals("http://localhost:4200/events", this.login());
+        Assertions.assertEquals("http://localhost:4200/events", login());
+        chromeDriver.close();
+    }
+
+    @Test
+    void createEventTest() throws InterruptedException {
+        Assertions.assertTrue(createEvent().contains("Selenium Test"));
         chromeDriver.close();
     }
 
