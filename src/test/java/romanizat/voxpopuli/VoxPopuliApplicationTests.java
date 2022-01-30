@@ -1,6 +1,7 @@
 package romanizat.voxpopuli;
 
 
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
@@ -33,7 +34,8 @@ class VoxPopuliApplicationTests {
     }
 
     private String createEvent() throws InterruptedException {
-        login();
+        //TODO: Uncomment login method if performing single test
+        //login();
         WebElement createEventButton = chromeDriver.findElement(By.xpath("/html/body/app-root/mat-drawer-container/mat-drawer-content/app-view-events/div/div/button"));
         createEventButton.click();
         Thread.sleep(1000);
@@ -52,7 +54,8 @@ class VoxPopuliApplicationTests {
     }
 
     private String deleteEvent() throws InterruptedException {
-        login();
+        //TODO: Uncomment login method if performing single test
+        //login();
         WebElement eventDetailsButton = chromeDriver.findElement(
                 By.xpath("/html/body/app-root/mat-drawer-container/mat-drawer-content/app-view-events/div/table/tbody/tr[2]/td[4]/mat-icon"));
         eventDetailsButton.click();
@@ -64,22 +67,42 @@ class VoxPopuliApplicationTests {
         return tableBody.getAttribute("innerHTML");
     }
 
+
+    private String createEventWithoutData() throws InterruptedException {
+        //TODO: Uncomment login method if performing single test
+        //login();
+        WebElement createEventButton = chromeDriver.findElement(By.xpath("/html/body/app-root/mat-drawer-container/mat-drawer-content/app-view-events/div/div/button"));
+        createEventButton.click();
+        Thread.sleep(1000);
+        WebElement saveEventButton = chromeDriver.findElement(By.xpath("//*[@id=\"mat-dialog-0\"]/app-create-event/div/form/div/button/span[1]"));
+        saveEventButton.click();
+        Thread.sleep(1000);
+        WebElement snackBar = chromeDriver.findElement(By.xpath("//*[@id=\"cdk-overlay-2\"]/snack-bar-container/div/div/simple-snack-bar"));
+        return snackBar.getAttribute("innerHTML");
+    }
+
     @Test
     void loginTest() throws InterruptedException {
         Assertions.assertEquals("http://localhost:4200/events", login());
-        chromeDriver.close();
     }
 
     @Test
     void createEventTest() throws InterruptedException {
         Assertions.assertTrue(createEvent().contains("Selenium Test"));
-        chromeDriver.close();
     }
 
     @Test
     void deleteEventTest() throws InterruptedException {
         Assertions.assertFalse(deleteEvent().contains("Selenium Test"));
-        chromeDriver.close();
     }
 
+    @Test
+    void createEventWithoutDataTest() throws InterruptedException {
+        Assertions.assertTrue(createEventWithoutData().contains("Please enter all of the required fields"));
+    }
+
+    @AfterAll
+    static void afterAll() {
+        chromeDriver.close();
+    }
 }
