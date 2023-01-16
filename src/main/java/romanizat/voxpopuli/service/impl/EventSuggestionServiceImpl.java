@@ -34,7 +34,8 @@ public class EventSuggestionServiceImpl implements EventSuggestionService {
             throw new UrlExistsException();
         }
         // get maximum position of event suggestion for event and increment the value for the new event suggestion
-        eventSuggestion.setPosition(eventSuggestionRepository.findMaxPositionForEventSuggestionByEventId(eventSuggestion.getEvent().getId()) + 1);
+        Integer maxPosition = eventSuggestionRepository.findMaxPositionForEventSuggestionByEventId(eventSuggestion.getEvent().getId());
+        eventSuggestion.setPosition(maxPosition == null ? 0 : maxPosition + 1);
 
         return eventSuggestionRepository.save(eventSuggestion);
     }
