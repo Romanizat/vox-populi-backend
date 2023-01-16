@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import romanizat.voxpopuli.entity.EventSuggestion;
+import romanizat.voxpopuli.entity.DTOs.EventSuggestionDTO;
 import romanizat.voxpopuli.service.EventSuggestionService;
 
 import java.util.List;
@@ -18,25 +18,25 @@ public class EventSuggestionController {
 
     @GetMapping
     @ApiOperation(value = "", nickname = "getAllEventSuggestions")
-    public ResponseEntity<List<EventSuggestion>> getAllEventSuggestions() {
+    public ResponseEntity<List<EventSuggestionDTO>> getAllEventSuggestions() {
         return ResponseEntity.ok(eventSuggestionService.findAll());
     }
 
     @GetMapping("/{idEventSuggestion}")
     @ApiOperation(value = "", nickname = "getEventSuggestionById")
-    public ResponseEntity<EventSuggestion> getEventSuggestionById(@PathVariable Integer idEventSuggestion) {
-        return ResponseEntity.ok(eventSuggestionService.findById(idEventSuggestion));
+    public ResponseEntity<EventSuggestionDTO> getEventSuggestionById(@PathVariable Integer idEventSuggestion) {
+        return ResponseEntity.ok(eventSuggestionService.getEventSuggestionDTOById(idEventSuggestion));
     }
 
     @PostMapping
     @ApiOperation(value = "", nickname = "saveEventSuggestion")
-    public ResponseEntity<EventSuggestion> saveEventSuggestion(@RequestBody EventSuggestion eventSuggestion) {
+    public ResponseEntity<EventSuggestionDTO> saveEventSuggestion(@RequestBody EventSuggestionDTO eventSuggestion) {
         return ResponseEntity.status(HttpStatus.CREATED).body(eventSuggestionService.save(eventSuggestion));
     }
 
     @PutMapping
     @ApiOperation(value = "", nickname = "updateEventSuggestion")
-    public ResponseEntity<EventSuggestion> updateEventSuggestion(@RequestBody EventSuggestion eventSuggestion) {
+    public ResponseEntity<EventSuggestionDTO> updateEventSuggestion(@RequestBody EventSuggestionDTO eventSuggestion) {
         return ResponseEntity.ok(eventSuggestionService.update(eventSuggestion));
     }
 
@@ -48,7 +48,7 @@ public class EventSuggestionController {
 
     @GetMapping("get-all-by-event/{idEvent}")
     @ApiOperation(value = "", nickname = "getAllEventSuggestionsForEvent")
-    public ResponseEntity<List<EventSuggestion>> getAllEventSuggestionsForEvent(@PathVariable Integer idEvent) {
+    public ResponseEntity<List<EventSuggestionDTO>> getAllEventSuggestionsForEvent(@PathVariable Integer idEvent) {
         return ResponseEntity.ok(eventSuggestionService.getAllEventSuggestionsForEvent(idEvent));
     }
 

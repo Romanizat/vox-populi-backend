@@ -3,21 +3,26 @@ package romanizat.voxpopuli.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import romanizat.voxpopuli.entity.EventSuggestion;
+import romanizat.voxpopuli.entity.DTOs.EventSuggestionDTO;
 import romanizat.voxpopuli.exception.UrlExistsException;
 import romanizat.voxpopuli.repository.EventSuggestionRepository;
 import romanizat.voxpopuli.service.EventSuggestionService;
+import romanizat.voxpopuli.service.UserService;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class EventSuggestionServiceImpl implements EventSuggestionService {
     private final EventSuggestionRepository eventSuggestionRepository;
 
+    private final UserService userService;
+
     @Override
-    public List<EventSuggestion> findAll() {
-        return eventSuggestionRepository.findAll();
+    public List<EventSuggestionDTO> findAll() {
+        return eventSuggestionRepository.findAll().stream().map(EventSuggestion::mapToDTO).collect(Collectors.toList());
     }
 
     @Override
@@ -27,7 +32,13 @@ public class EventSuggestionServiceImpl implements EventSuggestionService {
     }
 
     @Override
-    public EventSuggestion save(EventSuggestion eventSuggestion) {
+    public EventSuggestionDTO getEventSuggestionDTOById(Integer idEventSuggestion) {
+        return findById(idEventSuggestion).mapToDTO();
+    }
+
+    @Override
+    public EventSuggestionDTO save(EventSuggestionDTO eventSuggestionDTO) {
+        EventSuggestion eventSuggestion = mapToEntity(eventSuggestionDTO);
         String url = eventSuggestion.getUrl().trim();
         eventSuggestion.setUrl(prettifyUrl(url));
         if (songExistsInEvent(eventSuggestion.getUrl(), eventSuggestion.getEvent().getId())) {
@@ -37,12 +48,12 @@ public class EventSuggestionServiceImpl implements EventSuggestionService {
         Integer maxPosition = eventSuggestionRepository.findMaxPositionForEventSuggestionByEventId(eventSuggestion.getEvent().getId());
         eventSuggestion.setPosition(maxPosition == null ? 0 : maxPosition + 1);
 
-        return eventSuggestionRepository.save(eventSuggestion);
+        return eventSuggestionRepository.save(eventSuggestion).mapToDTO();
     }
 
     @Override
-    public EventSuggestion update(EventSuggestion eventSuggestion) {
-        return eventSuggestionRepository.save(eventSuggestion);
+    public EventSuggestionDTO update(EventSuggestionDTO eventSuggestionDTO) {
+        return eventSuggestionRepository.save(mapToEntity(eventSuggestionDTO)).mapToDTO();
     }
 
     @Override
@@ -60,8 +71,11 @@ public class EventSuggestionServiceImpl implements EventSuggestionService {
     }
 
     @Override
-    public List<EventSuggestion> getAllEventSuggestionsForEvent(Integer idEvent) {
-        return eventSuggestionRepository.findAllEventSuggestionsForEventByEventIdOrderedByPosition(idEvent);
+    public List<EventSuggestionDTO> getAllEventSuggestionsForEvent(Integer idEvent) {
+        return eventSuggestionRepository.findAllEventSuggestionsForEventByEventIdOrderedByPosition(idEvent)
+                .stream()
+                .map(EventSuggestion::mapToDTO)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -111,4 +125,14 @@ public class EventSuggestionServiceImpl implements EventSuggestionService {
         return splitUrl[splitUrl.length - 1];
     }
 
+    private EventSuggestion mapToEntity(EventSuggestionDTO eventSuggestionDTO) {
+        EventSuggestion eventSuggestion = new EventSuggestion();
+        eventSuggestion.setId(eventSuggestionDTO.getId());
+        eventSuggestion.setEvent(eventSuggestionDTO.getEvent());
+        eventSuggestion.setPosition(eventSuggestionDTO.getPosition());
+        eventSuggestion.setTitle(eventSuggestionDTO.getTitle());
+        eventSuggestion.setUrl(eventSuggestionDTO.getUrl());
+        eventSuggestion.setUser(userService.findById(eventSuggestionDTO.getUserId()));
+        return eventSuggestion;
+    }
 }

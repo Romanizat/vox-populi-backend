@@ -34,12 +34,17 @@ public class User extends Auditable implements UserDetails {
     private String name;
     @Column(name = "last_name")
     private String lastName;
+    @Column(name = "profile_photo")
+    private String profilePhoto;
     @Column(name = "banned")
     private Boolean banned;
     @ManyToMany(fetch = FetchType.EAGER)
     @JsonIgnore
     @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "id_user"), inverseJoinColumns = @JoinColumn(name = "id_role"))
     private List<Role> roles;
+    @JsonIgnore
+    @OneToMany(mappedBy = "user")
+    private List<EventSuggestion> eventSuggestions;
 
     @JsonIgnore
     @Override

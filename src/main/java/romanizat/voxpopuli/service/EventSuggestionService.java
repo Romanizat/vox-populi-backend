@@ -1,22 +1,24 @@
 package romanizat.voxpopuli.service;
 
 import romanizat.voxpopuli.entity.EventSuggestion;
+import romanizat.voxpopuli.entity.DTOs.EventSuggestionDTO;
 
 import java.util.List;
 
 public interface EventSuggestionService {
 
-    List<EventSuggestion> findAll();
+    List<EventSuggestionDTO> findAll();
 
-    EventSuggestion save(EventSuggestion eventSuggestion);
+    EventSuggestionDTO save(EventSuggestionDTO eventSuggestionDTO);
 
-    EventSuggestion update(EventSuggestion eventSuggestion);
+    EventSuggestionDTO update(EventSuggestionDTO eventSuggestionDTO);
 
     EventSuggestion findById(Integer idEventSuggestion);
+    EventSuggestionDTO getEventSuggestionDTOById(Integer idEventSuggestion);
 
     void deleteById(Integer idEventSuggestion);
 
-    List<EventSuggestion> getAllEventSuggestionsForEvent(Integer idEvent);
+    List<EventSuggestionDTO> getAllEventSuggestionsForEvent(Integer idEvent);
 
     void removeAllSuggestionsForEvent(Integer idEvent);
 
