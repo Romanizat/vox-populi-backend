@@ -15,4 +15,6 @@ public interface VoteService {
     Vote getVoteById(Integer idVote);
 
     List<VoteDTO> getAllVotesForEventSuggestion(Integer idEventSuggestion);
+
+    List<VoteDTO> getAllVotesByUserId(Integer idUser);
 }

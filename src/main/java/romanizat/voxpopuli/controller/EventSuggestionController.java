@@ -57,5 +57,11 @@ public class EventSuggestionController {
     public void updateEventSuggestionPosition(@PathVariable Integer oldPosition, @PathVariable Integer newPosition, @PathVariable Integer eventId) {
         eventSuggestionService.changeEventSuggestionOrderInEvent(oldPosition, newPosition, eventId);
     }
+
+    @GetMapping("number-of-event-suggestions-by-user/{idUser}")
+    @ApiOperation(value = "", nickname = "getNumberOfEventSuggestionsByUserId")
+    public ResponseEntity<Integer> getNumberOfEventSuggestionsByUserId(@PathVariable Integer idUser) {
+        return ResponseEntity.ok(eventSuggestionService.getNumberOfEventSuggestionsByUserId(idUser));
+    }
 }
 

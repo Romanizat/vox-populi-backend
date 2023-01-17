@@ -104,6 +104,12 @@ public class EventSuggestionServiceImpl implements EventSuggestionService {
         eventSuggestionRepository.save(eventSuggestion);
     }
 
+    @Override
+    public Integer getNumberOfEventSuggestionsByUserId(Integer idUser) {
+        Integer numberOfEventSuggestions = eventSuggestionRepository.getNumberOfEventSuggestionsByUserId(idUser);
+        return numberOfEventSuggestions == null ? 0 : numberOfEventSuggestions;
+    }
+
     private boolean songExistsInEvent(String url, Integer eventId) {
         List<EventSuggestion> eventSuggestionList = eventSuggestionRepository.findAllByEventId(eventId);
         for (EventSuggestion eventSuggestion : eventSuggestionList) {

@@ -23,4 +23,6 @@ public interface EventSuggestionService {
     void removeAllSuggestionsForEvent(Integer idEvent);
 
     void changeEventSuggestionOrderInEvent(Integer oldPosition, Integer newPosition, Integer eventId);
+
+    Integer getNumberOfEventSuggestionsByUserId(Integer idUser);
 }

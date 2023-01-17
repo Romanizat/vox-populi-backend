@@ -18,4 +18,10 @@ public interface EventParticipantRepository extends JpaRepository<EventParticipa
     void deleteAllByEventId(Integer idEvent);
 
     List<EventParticipant> findAllByEventId(Integer idEvent);
+
+    @Query(value = "select count(*) " +
+            "from event_participant " +
+            "where id_user = :idUser " +
+            "  and organizer = 1", nativeQuery = true)
+    Integer getNumberOfEventsOrganizedByUserId(@Param("idUser") Integer idUser);
 }

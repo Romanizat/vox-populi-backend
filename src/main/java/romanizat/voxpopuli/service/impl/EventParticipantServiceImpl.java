@@ -56,4 +56,11 @@ public class EventParticipantServiceImpl implements EventParticipantService {
     }
 
 
+    @Override
+    public Integer getNumberOfEventsOrganizedByUser(Integer userId) {
+        Integer numberOfEventsOrganizedByUser = eventParticipantRepository.getNumberOfEventsOrganizedByUserId(userId);
+        return numberOfEventsOrganizedByUser == null ? 0 : numberOfEventsOrganizedByUser;
+    }
+
+
 }

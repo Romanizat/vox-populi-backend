@@ -58,5 +58,12 @@ public class EventParticipantController {
         eventParticipantService.deleteById(idEventParticipant);
     }
 
+
+    @GetMapping("number-of-events-organized-by-user/{idUser}")
+    @ApiOperation(value = "", nickname = "getNumberOfEventsOrganizedByUser")
+    public ResponseEntity<Integer> getNumberOfEventsOrganizedByUser(@PathVariable Integer idUser) {
+        return ResponseEntity.ok(eventParticipantService.getNumberOfEventsOrganizedByUser(idUser));
+    }
+
 }
 

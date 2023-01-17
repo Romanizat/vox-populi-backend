@@ -50,6 +50,14 @@ public class VoteServiceImpl implements VoteService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public List<VoteDTO> getAllVotesByUserId(Integer idUser) {
+        return voteRepository.findAllByUserId(idUser)
+                .stream()
+                .map(Vote::mapToDTO)
+                .collect(Collectors.toList());
+    }
+
     private Vote mapToEntity(VoteDTO voteDTO) {
         Vote vote = new Vote();
         vote.setId(voteDTO.getId());

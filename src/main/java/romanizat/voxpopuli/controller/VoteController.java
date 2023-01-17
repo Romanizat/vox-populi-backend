@@ -22,6 +22,12 @@ public class VoteController {
         return ResponseEntity.ok(voteService.getAllVotesForEventSuggestion(idEventSuggestion));
     }
 
+    @GetMapping("/get-all-by-user/{idUser}")
+    @ApiOperation(value = "", nickname = "getAllVotesFromUser")
+    public ResponseEntity<List<VoteDTO>> getAllVotesFromUser(@PathVariable Integer idUser) {
+        return ResponseEntity.ok(voteService.getAllVotesByUserId(idUser));
+    }
+
     @PostMapping
     @ApiOperation(value = "", nickname = "saveVote")
     public ResponseEntity<VoteDTO> saveVote(@RequestBody VoteDTO voteDTO) {
