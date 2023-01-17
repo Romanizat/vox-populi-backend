@@ -35,7 +35,7 @@ public class UserController {
     }
 
     @GetMapping("/user-by-username/{username}")
-    @ApiOperation(value = "", nickname = "getUserById")
+    @ApiOperation(value = "", nickname = "getUserByUsername")
     public ResponseEntity<User> getUserByUsername(@PathVariable String username) {
         return ResponseEntity.ok(userService.findUserByUsername(username));
     }
