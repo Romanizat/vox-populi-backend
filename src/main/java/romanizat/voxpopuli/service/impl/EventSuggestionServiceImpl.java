@@ -2,8 +2,8 @@ package romanizat.voxpopuli.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import romanizat.voxpopuli.entity.EventSuggestion;
 import romanizat.voxpopuli.entity.DTOs.EventSuggestionDTO;
+import romanizat.voxpopuli.entity.EventSuggestion;
 import romanizat.voxpopuli.exception.UrlExistsException;
 import romanizat.voxpopuli.repository.EventSuggestionRepository;
 import romanizat.voxpopuli.service.EventSuggestionService;
@@ -39,8 +39,7 @@ public class EventSuggestionServiceImpl implements EventSuggestionService {
     @Override
     public EventSuggestionDTO save(EventSuggestionDTO eventSuggestionDTO) {
         EventSuggestion eventSuggestion = mapToEntity(eventSuggestionDTO);
-        String url = eventSuggestion.getUrl().trim();
-        eventSuggestion.setUrl(prettifyUrl(url));
+        eventSuggestion.setUrl(prettifyUrl(eventSuggestion.getUrl().trim()));
         if (songExistsInEvent(eventSuggestion.getUrl(), eventSuggestion.getEvent().getId())) {
             throw new UrlExistsException();
         }
@@ -132,7 +131,7 @@ public class EventSuggestionServiceImpl implements EventSuggestionService {
         eventSuggestion.setPosition(eventSuggestionDTO.getPosition());
         eventSuggestion.setTitle(eventSuggestionDTO.getTitle());
         eventSuggestion.setUrl(eventSuggestionDTO.getUrl());
-        eventSuggestion.setUser(userService.findById(eventSuggestionDTO.getUserId()));
+        eventSuggestion.setUser(userService.findById(eventSuggestionDTO.getCreatorUserId()));
         return eventSuggestion;
     }
 }

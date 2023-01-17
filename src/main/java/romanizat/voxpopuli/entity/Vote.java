@@ -22,7 +22,7 @@ public class Vote {
     private Integer id;
     @ManyToOne
     @JoinColumn(name = "id_event_suggestion", referencedColumnName = "id_event_suggestion")
-    private EventSuggestion eventSuggestions;
+    private EventSuggestion eventSuggestion;
     @ManyToOne
     @JoinColumn(name = "id_user", referencedColumnName = "id_user")
     private User user;
@@ -43,10 +43,10 @@ public class Vote {
     }
 
 
-    VoteDTO mapToDTO() {
+    public VoteDTO mapToDTO() {
         return new VoteDTO(
                 id,
-                eventSuggestions.getId(),
+                eventSuggestion.getId(),
                 user.getId(),
                 upvote
         );

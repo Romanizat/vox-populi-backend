@@ -7,6 +7,7 @@ import lombok.ToString;
 import romanizat.voxpopuli.entity.DTOs.EventSuggestionDTO;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -34,7 +35,7 @@ public class EventSuggestion extends Auditable {
     @ManyToOne()
     @JoinColumn(name = "creator_user_fk", referencedColumnName = "id_user")
     private User user;
-    @OneToMany(mappedBy = "eventSuggestions")
+    @OneToMany(mappedBy = "eventSuggestion")
     private List<Vote> votes;
 
     @Override
@@ -58,7 +59,9 @@ public class EventSuggestion extends Auditable {
                 title,
                 url,
                 user.getId(),
-                votes.stream().map(Vote::mapToDTO).collect(Collectors.toList())
+                votes == null || votes.isEmpty() ?
+                        new ArrayList<>() :
+                        votes.stream().map(Vote::mapToDTO).collect(Collectors.toList())
         );
     }
 }

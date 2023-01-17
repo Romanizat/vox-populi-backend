@@ -16,6 +16,6 @@ public class EventSuggestionDTO {
     private Integer position;
     private String title;
     private String url;
-    private Integer userId;
+    private Integer creatorUserId;
     private List<VoteDTO> votes;
 }
