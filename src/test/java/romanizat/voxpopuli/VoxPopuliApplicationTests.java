@@ -24,7 +24,8 @@ class VoxPopuliApplicationTests {
         usernameField.sendKeys("admin");
         WebElement passwordField = chromeDriver.findElement(By.xpath("//*[@id=\"mat-input-1\"]"));
         passwordField.sendKeys("admin");
-        WebElement loginButton = chromeDriver.findElement(By.xpath("//*[@id=\"mat-tab-content-0-0\"]/div/form/button/span[1]"));
+        WebElement loginButton = chromeDriver.findElement(By.xpath(
+                "//*[@id=\"mat-tab-content-0-0\"]/div/form/button/span[3]"));
         loginButton.click();
         Thread.sleep(2000);
         return chromeDriver.getCurrentUrl();
@@ -39,10 +40,11 @@ class VoxPopuliApplicationTests {
         WebElement eventNameField = chromeDriver.findElement(By.id("eventName"));
         eventNameField.sendKeys("Selenium Test");
         WebElement eventDateField = chromeDriver.findElement(By.id("eventDate"));
-        eventDateField.sendKeys("2/2/2022");
+        eventDateField.sendKeys("15/6/2023");
         WebElement eventLocationField = chromeDriver.findElement(By.id("eventLocation"));
-        eventLocationField.sendKeys("SE201");
-        WebElement saveEventButton = chromeDriver.findElement(By.xpath("//*[@id=\"mat-dialog-0\"]/app-create-event/div/form/div/button/span[1]"));
+        eventLocationField.sendKeys("IT355");
+        WebElement saveEventButton = chromeDriver.findElement(By.xpath(
+                "//*[@id=\"createEvent\"]/span[2]"));
         saveEventButton.click();
         Thread.sleep(1000);
         WebElement tableBody = chromeDriver.findElement(By.xpath("/html/body/app-root/mat-drawer-container/mat-drawer-content/app-view-events/div/table/tbody"));
@@ -57,7 +59,8 @@ class VoxPopuliApplicationTests {
                 By.xpath("/html/body/app-root/mat-drawer-container/mat-drawer-content/app-view-events/div/table/tbody/tr[2]/td[4]/mat-icon"));
         eventDetailsButton.click();
         Thread.sleep(2000);
-        WebElement deleteEventButton = chromeDriver.findElement(By.xpath("/html/body/app-root/mat-drawer-container/mat-drawer-content/app-event-details/div[4]/button"));
+        WebElement deleteEventButton = chromeDriver.findElement(By.xpath(
+                "/html/body/app-root/mat-drawer-container/mat-drawer-content/app-event-details/div[2]/div[3]/button/span[5]"));
         deleteEventButton.click();
         Thread.sleep(1000);
         WebElement tableBody = chromeDriver.findElement(By.xpath("/html/body/app-root/mat-drawer-container/mat-drawer-content/app-view-events/div/table/tbody"));
@@ -74,7 +77,7 @@ class VoxPopuliApplicationTests {
         WebElement saveEventButton = chromeDriver.findElement(By.id("createEvent"));
         saveEventButton.click();
         Thread.sleep(1000);
-        WebElement snackBar = chromeDriver.findElement(By.tagName("snack-bar-container"));
+        WebElement snackBar = chromeDriver.findElement(By.tagName("simple-snack-bar"));
         return snackBar.getAttribute("innerHTML");
     }
 
